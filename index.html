@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Guess My Number!</h1>
+        <p>Guess the number between 1 and 50:</p>
+              <!-- Display question mark or the guessed number -->
+              <p class="guess-box"><span id="displayNumber">?</span></p>
+          
+        <input class="box" type="number" id="guessInput" min="1" max="50">
+        <button class="btn" onclick="checkGuess()">Check</button>
+        
+        <p class="score">Score: <span id="attempts">20</span></p>
+        <p class="high-score">High Score: <span id="highScore">0</span></p> <!-- High Score -->
+
+        <button class="btn" onclick="restartGame()">Restart</button> <!-- Restart Button -->
+       
+  
+        <p id="result"></p>
+    </div>
+
+    <script>
+        let randomNumber = Math.floor(Math.random() * 50) + 1;  // Random number between 1 and 50
+        let attempts = 20;  // Start score from 20
+        let highScore = 0; 
+
+        function checkGuess() {
+            const guess = Number(document.getElementById('guessInput').value);
+            const result = document.getElementById('result');
+            const displayNumber = document.getElementById('displayNumber');
+            const score = document.getElementById('attempts');
+            const container = document.querySelector('.container'); // Select the container element
+            const highScoreDisplay = document.getElementById('highScore');
+
+            if (guess === randomNumber) {
+                result.textContent = `Congratulations! You guessed the number ${randomNumber}.`;
+                result.style.color = 'green';
+                displayNumber.textContent = randomNumber;  // Show the correct number
+                container.style.backgroundColor= 'green';
+                   // Update high score if it's higher than the current
+                   if (attempts > highScore) {
+                    highScore = attempts;
+                    highScoreDisplay.textContent = highScore; // Update high score on screen
+                }
+            } else {
+                if (guess > randomNumber) {
+                    result.textContent = 'Too high! Try again.';
+                } else {
+                    result.textContent = 'Too low! Try again.';
+                }
+                result.style.color = 'red';
+                displayNumber.textContent = '?';  // Reset to question mark
+                attempts--;  // Reduce score
+                score.textContent = attempts;  // Update score on screen
+
+                if (attempts <= 0) {
+                    result.textContent = `Game over! The correct number was ${randomNumber}.`;
+                    result.style.color = 'black';
+                    displayNumber.textContent = randomNumber;  // Show the correct number
+                }
+            }
+        }
+        function restartGame() {
+            randomNumber = Math.floor(Math.random() * 50) + 1;  // Generate new random number
+            attempts = 20;  // Reset attempts
+            document.getElementById('guessInput').value = '';  // Clear input
+            document.getElementById('displayNumber').textContent = '?';  // Reset display to '?'
+            document.getElementById('attempts').textContent = attempts;  // Reset score display
+            document.getElementById('result').textContent = '';  // Clear result message
+            document.querySelector('.container').style.backgroundColor = 'black';  // Reset background color
+        }
+    </script>
+</body>
+</html>
